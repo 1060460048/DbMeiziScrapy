@@ -11,7 +11,7 @@ from scrapy.item import Item, Field
 class MeiziItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    datasrc = Field()
+    imgsrc = Field()
     title = Field()
-    dataid = Field()
+    topiclink = Field()
     startcount = Field()

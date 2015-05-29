@@ -4,19 +4,21 @@ from dbmeizi.items import MeiziItem
 
 class dbmeiziSpider(Spider):
     name = "dbmeiziSpider"
-    allowed_domin =["dbmeizi.com"]
-    start_urls = [
+    allowed_domin =["dbmeinv.com"]
+    strArray = []
+    for i in range(2598,1,-1):
+        str = "http://www.dbmeinv.com/?pager_offset=%d" % i
+        strArray.append(str)
+    start_urls = strArray
             
-        "http://www.dbmeizi.com", 
-    ]
-
     def parse(self, response):
-        liResults = Selector(response).xpath('//li[@class="span3"]')
-        for li in liResults:
-            for img in li.xpath('.//img'):
-                item = MeiziItem()
-                item['title'] = img.xpath('@data-title').extract()
-                item['dataid'] = img.xpath('@data-id').extract()
-                item['datasrc'] = img.xpath('@data-src').extract()
-                item['startcount'] = 0
-                yield item
+        divResults = Selector(response).xpath('//div[@class="img_single"]')
+        for div in divResults:
+            item = MeiziItem()
+            href = div.xpath('.//a')[0]
+            img = div.xpath('.//img')[0]
+            item['topiclink'] = href.xpath('@href').extract()[0]
+            item['title'] = img.xpath('@title').extract()[0] 
+            item['imgsrc'] = img.xpath('@src').extract()[0]
+            item['startcount'] = 0
+            yield item
